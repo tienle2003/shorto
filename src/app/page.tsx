@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { QRCodeSVG } from "qrcode.react";
-import { Link2, Copy, Check, ArrowRight } from "lucide-react";
+import { QRCodeCanvas } from "qrcode.react";
+import { Link2, Copy, Check, ArrowRight, Download } from "lucide-react";
 import toast from "react-hot-toast";
 import { linkSchema } from "@/lib/validations/link.schema";
 import { z } from "zod";
@@ -74,6 +74,20 @@ export default function Home() {
     setCopied(true);
     toast.success("Copied to clipboard!");
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownloadQR = () => {
+    const canvas = document.getElementById("qr-code") as HTMLCanvasElement;
+    if (canvas) {
+      const pngUrl = canvas.toDataURL("image/png");
+      const downloadLink = document.createElement("a");
+      downloadLink.href = pngUrl;
+      downloadLink.download = `qrcode.png`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      toast.success("QR Code downloaded!");
+    }
   };
 
   return (
@@ -157,8 +171,19 @@ export default function Home() {
         {shortUrl && (
           <div className="mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex flex-col items-center">
-              <div className="bg-white p-3 rounded-xl shadow-sm border border-zinc-100 dark:border-none mb-6">
-                <QRCodeSVG value={shortUrl} size={150} level="M" />
+              <div className="flex flex-col items-center mb-6">
+                <div className="bg-white p-3 rounded-xl shadow-sm border border-zinc-100 dark:border-none">
+                  <QRCodeCanvas id="qr-code" value={shortUrl} size={150} level="M" />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleDownloadQR}
+                  className="mt-3 flex items-center gap-2 px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 bg-zinc-100 hover:bg-zinc-200 dark:text-zinc-300 dark:hover:text-white dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-lg transition-colors"
+                  aria-label="Download QR Code"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Download QR</span>
+                </button>
               </div>
               
               <div className="w-full flex items-center gap-2 p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
