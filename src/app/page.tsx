@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { QRCodeCanvas } from "qrcode.react";
-import { Link2, Copy, Check, ArrowRight, Download } from "lucide-react";
+import { Link2, Copy, Check, ArrowRight, Download, Link, Tag } from "lucide-react";
 import toast from "react-hot-toast";
 import { linkSchema } from "@/lib/validations/link.schema";
 import { z } from "zod";
@@ -91,8 +91,13 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black p-4">
-      <main className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 p-8">
+    <div className="relative flex flex-col flex-1 items-center justify-center bg-slate-100 font-sans dark:bg-zinc-950 p-4 overflow-hidden">
+      {/* Decorative Background Orbs */}
+      <div className="absolute top-[-10%] left-[10%] w-[500px] h-[500px] bg-indigo-400/60 dark:bg-indigo-600/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-100 animate-pulse" style={{ animationDuration: '4s' }} />
+      <div className="absolute bottom-[-10%] right-[10%] w-[500px] h-[500px] bg-purple-400/60 dark:bg-purple-600/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-100 animate-pulse" style={{ animationDelay: '2s', animationDuration: '5s' }} />
+      <div className="absolute top-[20%] left-[40%] w-[500px] h-[500px] bg-pink-400/60 dark:bg-pink-600/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-100 animate-pulse" style={{ animationDelay: '4s', animationDuration: '6s' }} />
+
+      <main className="relative z-10 w-full max-w-md bg-white/80 dark:bg-zinc-900/80 backdrop-blur-2xl rounded-3xl shadow-[0_20px_60px_-15px_rgba(79,70,229,0.15)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] border border-indigo-50 dark:border-zinc-800 p-8">
         <div className="flex flex-col items-center mb-8">
           <div className="bg-indigo-100 dark:bg-indigo-900/30 p-3 rounded-full mb-4">
             <Link2 className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
@@ -110,17 +115,20 @@ export default function Home() {
             <label htmlFor="url" className="sr-only">
               URL to shorten
             </label>
-            <div className="relative">
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Link className={`w-5 h-5 transition-colors duration-300 ${errors.originalUrl ? 'text-red-400' : 'text-zinc-400 group-focus-within:text-indigo-500'}`} />
+              </div>
               <input
                 type="text"
                 id="url"
                 {...register("originalUrl")}
                 placeholder="https://example.com/very/long/url"
-                className={`w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-950 border ${
+                className={`w-full pl-11 pr-4 py-3.5 bg-zinc-50/50 dark:bg-zinc-950/50 border ${
                   errors.originalUrl
-                    ? "border-red-500 focus:ring-red-500 focus:border-red-500"
-                    : "border-zinc-200 dark:border-zinc-800 focus:ring-indigo-500 focus:border-indigo-500"
-                } rounded-xl focus:ring-2 transition-colors outline-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400`}
+                    ? "border-red-500 focus:ring-4 focus:ring-red-500/20 focus:border-red-500"
+                    : "border-zinc-200 dark:border-zinc-800 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500"
+                } rounded-xl transition-all duration-300 outline-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400`}
                 disabled={isLoading}
               />
             </div>
@@ -133,17 +141,20 @@ export default function Home() {
             <label htmlFor="customAlias" className="sr-only">
               Custom Alias (optional)
             </label>
-            <div className="relative">
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Tag className={`w-5 h-5 transition-colors duration-300 ${errors.customAlias ? 'text-red-400' : 'text-zinc-400 group-focus-within:text-indigo-500'}`} />
+              </div>
               <input
                 type="text"
                 id="customAlias"
                 {...register("customAlias")}
                 placeholder="Custom alias (optional)"
-                className={`w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-950 border ${
+                className={`w-full pl-11 pr-4 py-3.5 bg-zinc-50/50 dark:bg-zinc-950/50 border ${
                   errors.customAlias
-                    ? "border-red-500 focus:ring-red-500 focus:border-red-500"
-                    : "border-zinc-200 dark:border-zinc-800 focus:ring-indigo-500 focus:border-indigo-500"
-                } rounded-xl focus:ring-2 transition-colors outline-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400`}
+                    ? "border-red-500 focus:ring-4 focus:ring-red-500/20 focus:border-red-500"
+                    : "border-zinc-200 dark:border-zinc-800 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500"
+                } rounded-xl transition-all duration-300 outline-none text-zinc-900 dark:text-zinc-100 placeholder-zinc-400`}
                 disabled={isLoading}
               />
             </div>
@@ -155,7 +166,7 @@ export default function Home() {
           <button
             type="submit"
             disabled={isLoading || !url}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-4 py-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed text-white rounded-xl font-semibold hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/30 transition-all duration-300"
           >
             {isLoading ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -169,10 +180,10 @@ export default function Home() {
         </form>
 
         {shortUrl && (
-          <div className="mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex flex-col items-center">
+          <div className="mt-8 animate-in fade-in slide-in-from-top-4 duration-500 ease-out">
+            <div className="bg-slate-50 dark:bg-zinc-900/60 p-6 rounded-2xl border border-indigo-100/50 dark:border-zinc-800 flex flex-col items-center shadow-inner">
               <div className="flex flex-col items-center mb-6">
-                <div className="bg-white p-3 rounded-xl shadow-sm border border-zinc-100 dark:border-none">
+                <div className="bg-white p-3 rounded-2xl shadow-sm border border-zinc-100 dark:border-none ring-1 ring-black/5">
                   <QRCodeCanvas id="qr-code" value={shortUrl} size={150} level="M" />
                 </div>
                 <button
