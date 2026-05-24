@@ -99,14 +99,14 @@ export default function Home() {
 
       <main className="relative z-10 w-full max-w-md bg-white/80 dark:bg-zinc-900/80 backdrop-blur-2xl rounded-3xl shadow-[0_20px_60px_-15px_rgba(79,70,229,0.15)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] border border-indigo-50 dark:border-zinc-800 p-8">
         <div className="flex flex-col items-center mb-8">
-          <div className="bg-indigo-100 dark:bg-indigo-900/30 p-3 rounded-full mb-4">
-            <Link2 className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+          <div className="inline-flex items-center justify-center p-3 mb-5 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-500 shadow-lg shadow-indigo-500/30">
+            <Link2 className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 text-center">
-            Shorten Your Link
+          <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-50 text-center tracking-tight">
+            Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-500 dark:from-indigo-400 dark:to-fuchsia-400">Shorto Tool</span>
           </h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 text-center">
-            Paste your long URL below to create a concise, shareable link.
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-3 text-center px-4">
+            The blazing-fast way to transform your long URLs into concise, shareable links.
           </p>
         </div>
 
