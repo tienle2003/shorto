@@ -10,6 +10,7 @@ jest.mock("@/lib/db", () => ({
     link: {
       create: jest.fn(),
       findUnique: jest.fn(),
+      findFirst: jest.fn(),
     },
   },
 }));
@@ -60,5 +61,25 @@ describe("POST /api/shorten", () => {
 
     const response = await POST(mockRequest);
     expect(response.status).toBe(400);
+  });
+
+  it("should return existing short URL if the same original URL is provided without custom alias", async () => {
+    const mockRequest = new Request("http://localhost/api/shorten", {
+      method: "POST",
+      body: JSON.stringify({ originalUrl: "https://existing.com" }),
+    });
+
+    (db.link.findFirst as jest.Mock).mockResolvedValue({
+      id: "2",
+      originalUrl: "https://existing.com",
+      shortCode: "existcode",
+    });
+
+    const response = await POST(mockRequest);
+    const json = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(json.shortCode).toBe("existcode");
+    expect(db.link.create).not.toHaveBeenCalled();
   });
 });

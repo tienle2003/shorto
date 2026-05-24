@@ -9,6 +9,17 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { originalUrl, customAlias } = linkSchema.parse(body);
 
+    if (!customAlias) {
+      const existingLink = await db.link.findFirst({
+        where: { originalUrl },
+        orderBy: { createdAt: "desc" },
+      });
+
+      if (existingLink) {
+        return NextResponse.json(existingLink, { status: 200 });
+      }
+    }
+
     let shortCode = nanoid(6);
 
     if (customAlias) {
