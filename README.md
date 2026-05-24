@@ -5,6 +5,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 ![Zod](https://img.shields.io/badge/Zod-3068b7?style=for-the-badge&logo=zod&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
@@ -26,7 +27,7 @@ Shorto is a blazing-fast, modern URL shortener built with Next.js App Router. It
 - **Custom Aliases**: Option to provide a custom shortcode of your choice.
 - **QR Code Generation**: Automatically generates a QR code for every shortened URL to easily scan on mobile devices.
 - **End-to-End Validation**: Strict data validation on both client and server sides using **Zod** and **React Hook Form**.
-- **Lightning-Fast Redirects**: Utilizes HTTP 302 redirects for near-instant navigation to the original link.
+- **Lightning-Fast Redirects**: Utilizes **Redis** caching and Next.js background tasks (`after()`) for near-instant HTTP 302 redirects to the original link.
 - **Modern & Minimal UI**: A sleek, responsive, and mobile-friendly user interface built with Tailwind CSS.
 
 ---
@@ -36,6 +37,7 @@ Shorto is a blazing-fast, modern URL shortener built with Next.js App Router. It
 - **Core:** Next.js (App Router), TypeScript
 - **Styling:** Tailwind CSS, Lucide React
 - **Database & ORM:** PostgreSQL (Hosted on [Neon.tech](https://neon.tech/)), Prisma
+- **Caching:** Redis (via [Upstash](https://upstash.com/))
 - **Validation:** Zod, React Hook Form
 - **Deployment:** Vercel
 
@@ -68,7 +70,8 @@ Follow these instructions to set up and run the project locally.
    ```bash
    cp .env.example .env
    ```
-   Open the `.env` file and replace the `DATABASE_URL` with your own PostgreSQL connection string.
+   Open the `.env` file and replace the `DATABASE_URL` with your own PostgreSQL connection string. 
+   Additionally, provide `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` from your [Upstash](https://upstash.com/) Redis dashboard for caching.
 
 4. **Initialize the Database:**
    Push the schema to your database and generate the Prisma Client.

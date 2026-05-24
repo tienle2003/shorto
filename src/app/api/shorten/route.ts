@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { linkSchema } from "@/lib/validations/link.schema";
 import { db } from "@/lib/db";
+import { redis } from "@/lib/redis";
 import { nanoid } from "nanoid";
 
 export async function POST(req: Request) {
@@ -42,6 +43,14 @@ export async function POST(req: Request) {
         shortCode,
       },
     });
+
+    if (redis) {
+      try {
+        await redis.set(`link:${shortCode}`, originalUrl);
+      } catch (err) {
+        console.error("Failed to set redis cache:", err);
+      }
+    }
 
     return NextResponse.json(link, { status: 201 });
   } catch (error: any) {
